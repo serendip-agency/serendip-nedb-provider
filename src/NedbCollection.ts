@@ -70,14 +70,15 @@ export class NedbCollection<T> implements DbCollectionInterface<T> {
   }
   public updateOne(model: T, userId?: string): Promise<T> {
     return new Promise((resolve, reject) => {
-      model["_id"] = new ObjectID(model["_id"]);
+  //    model["_id"] = new ObjectID(model["_id"]);
       model["_vdate"] = Date.now();
+ 
       this.collection.update(
         { _id: model["_id"] },
-        { $set: model },
+        { $set: _.omit(model, "_id") },
         {
-          upsert: true,
-          returnUpdatedDocs: true
+          upsert: false,
+          returnUpdatedDocs: false
         },
         (err, number, docs) => {
           if (err) return reject(err);

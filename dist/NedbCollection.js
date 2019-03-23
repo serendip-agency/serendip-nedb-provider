@@ -72,11 +72,11 @@ class NedbCollection {
     }
     updateOne(model, userId) {
         return new Promise((resolve, reject) => {
-            model["_id"] = new bson_objectid_1.default(model["_id"]);
+            //    model["_id"] = new ObjectID(model["_id"]);
             model["_vdate"] = Date.now();
-            this.collection.update({ _id: model["_id"] }, { $set: model }, {
-                upsert: true,
-                returnUpdatedDocs: true
+            this.collection.update({ _id: model["_id"] }, { $set: _.omit(model, "_id") }, {
+                upsert: false,
+                returnUpdatedDocs: false
             }, (err, number, docs) => {
                 if (err)
                     return reject(err);
